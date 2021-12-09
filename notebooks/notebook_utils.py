@@ -1,9 +1,4 @@
 import os
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
-from google.colab import auth
-from oauth2client.client import GoogleCredentials
-
 
 HYPERSTYLE_PATHS = {
     "faces": {"id": "1C3dEIIH1y8w1-zQMCyx7rDF0ndswSXh4", "name": "hyperstyle_ffhq.pt"},
@@ -35,6 +30,11 @@ class Downloader:
             self.authenticate()
 
     def authenticate(self):
+        from google.colab import auth
+        from pydrive.auth import GoogleAuth
+        from pydrive.drive import GoogleDrive
+        from oauth2client.client import GoogleCredentials
+
         auth.authenticate_user()
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
@@ -50,7 +50,8 @@ class Downloader:
             downloaded.FetchMetadata(fetch_all=True)
             downloaded.GetContentFile(file_dst)
         else:
-            os.system(f"gdown --id {file_id} -O {file_dst}")
+            import gdown
+            gdown.download(id=file_id, output=file_dst)
 
 
 def run_alignment(image_path):
